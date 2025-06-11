@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo__chayolep.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Recetas de Chayotes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e0e3dc;
+            min-height: 100vh;
+            padding: 0;
+            
+        }
+
+        /* Navegación mejorada */
+        .nav {
+            
+            background: rgba(168, 184, 136, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-contenido {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .navbar-icon img {
+            width: 150px;
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .nav-lista {
+            display: flex;
+            justify-content: flex-end;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .lista-item a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: rgba(5, 54, 5, 0.699);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lista-item a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .lista-item:hover a {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(123, 175, 17, 0.3);
+            border-radius: 10px;
+        }
+
+        .lista-item:hover a::before {
+            left: 100%;
+        }
+        .header {
+            background-image: url('Chayote encabezado.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: rgb(255, 255, 255);
+            position: relative;
+            border-radius: 0 0 30px 30px;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+       
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .recipe-card {
+            background: #f1f3f4;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid #e8eaed;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-color: #dadce0;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #e8eaed, #dadce0);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            border: 2px solid #dadce0;
+            color: #5f6368;
+            font-size: 0.85rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .recipe-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .recipe-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #73c595, #9fd699);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .recipe-description {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .ingredients-list {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            border: 2px solid #e8eaed;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .ingredients-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .ingredients-list ul {
+            list-style: none;
+        }
+
+        .ingredients-list li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .ingredients-list li::before {
+            content: '•';
+            color: #667eea;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+       
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recipe-info {
+                justify-content: center;
+            }
+
+            .nav-tabs {
+                gap: 1rem;
+            }
+
+            .nav-tab {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+        <nav class="nav">
+        <div class="nav-contenido">
+            <div class="navbar-icon">
+                <a href="#inicio"><img src="icono.png" alt="Chayolep Logo"></a>
+            </div>
+            <ul class="nav-lista">
+                <li class="lista-item"><a href="../index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li class="lista-item"><a href="index4.html">Recetas</a></li>
+                <li class="lista-item"><a href="../beneficios/beneficios.html">Beneficios</a></li>
+                <li class="lista-item"><a href="../exportadores.html">Exportadores</a></li>
+                <li class="lista-item"><a href="../curiosidades.html">Datos curiosos</a></li>
+                <li class="lista-item"><a href="../Tipos/index.html"> Variedades</a></li>
+                
+                
+            </ul>
+        </div>
+    </nav>
+
+   
+    <div class="container" style="margin: 100px 80px;">
+        <header class="header">
+            <div class="header-content">
+                <h1>Recetas de Chayotes</h1>
+                <p>Descubre deliciosas formas de preparar este versátil vegetal</p>
+            </div>
+        </header>
+
+        <div class="recipes-grid">
+            <div class="recipe-card">
+                <div class="image-placeholder">
+                    <img src="Chayotes rellenos2.jpeg" alt="Chayote Relleno">
+                </div>
+                <h2 class="recipe-title">Chayotes Rellenos de Queso</h2>
+                <div class="recipe-info">
+                    <div class="info-item">
+                        <div class="info-icon">⏱</div>
+                        <span>45 min</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">👥</div>
+                        <span>4 personas</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🔥</div>
+                        <span>Fácil</span>
+                    </div>
+                </div>
+                <p class="recipe-description">
+                    Una deliciosa preparación tradicional donde los chayotes se rellenan con una mezcla cremosa de queso, creando un platillo reconfortante y nutritivo perfecto para cualquier ocasión.
+                </p>
+                <div class="ingredients-list">
+                    <h3 class="ingredients-title">Ingredientes principales:</h3>
+                    <ul>
+                        <li>4 chayotes medianos</li>
+                        <li>200g de queso fresco</li>
+                        <li>1 cebolla picada</li>
+                        <li>2 dientes de ajo</li>
+                        <li>Sal y pimienta al gusto</li>
+                    </ul>
+                </div>
+                <p class="recipe-description">
+                   <b>1.</b> Cocina los chayotes<br>
+                   Hiérvelos enteros con sal por 25–30 min, hasta que estén suaves.<br>
+
+                   Córtalos a la mitad y retira con cuidado la pulpa.<br><br>
+
+                   <b>1.</b> Prepara el relleno<br>
+                   Sofríe la cebolla y el ajo en un poco de aceite o mantequilla.<br>
+                   Agrega la pulpa del chayote (picada) y cocina unos minutos.<br>
+                   Mezcla con el queso fresco desmoronado. Sazona con sal y pimienta.<br><br>
+
+                   <b>1.</b> Rellena los chayotes<br>
+                   Coloca la mezcla en las cáscaras vacías.<br><br>
+                    <b>1.</b> Hornea (opcional)<br>
+                    Puedes gratinarlos 10 min a 180 °C para que el queso se dore (opcional pero recomendado).<br><br>
+                    <b>1.</b> Sirve caliente<br>
+                    ¡Y disfruta esta receta casera y nutritiva!<br>
+
+                </p>
+            </div>
+
+            <div class="recipe-card">
+                <div class="image-placeholder">
+                    <img src="crema de chayote.jpg" alt="crema de chayote">
+                </div>
+                <h2 class="recipe-title">Chayotes en Crema</h2>
+                <div class="recipe-info">
+                    <div class="info-item">
+                        <div class="info-icon">⏱</div>
+                        <span>30 min</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">👥</div>
+                        <span>6 personas</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🔥</div>
+                        <span>Fácil</span>
+                    </div>
+                </div>
+                <p class="recipe-description">
+                    Una preparación cremosa y suave que resalta el sabor natural del chayote. Esta receta familiar es perfecta como acompañamiento o plato principal ligero.
+                </p>
+                <div class="ingredients-list">
+                    <h3 class="ingredients-title">Ingredientes principales:</h3>
+                    <ul>
+                        <li>6 chayotes tiernos</li>
+                        <li>1 taza de crema para cocinar</li>
+                        <li>1 cebolla blanca</li>
+                        <li>Mantequilla</li>
+                        <li>Consomé de pollo</li>
+                    </ul>
+                </div>
+                <p class="recipe-description">
+
+                   <b>1.</b> Pela y corta los chayotes<br>
+
+                    Córtalos en cubos medianos.<br><br>
+
+                    <b>2.</b> Hiérvelos<br>
+
+                    En agua con sal hasta que estén suaves (15–20 min). Escurre y reserva.<br><br>
+
+                    <b>3.</b> Sofríe la cebolla<br>
+
+                    Pícala y cocínala en mantequilla hasta que esté transparente.<br><br>
+
+                    <b>4.</b> Agrega la crema y el consomé<br>
+
+                    Mezcla bien hasta que todo esté caliente y cremoso.<br><br>
+
+                    <b>5.</b> Incorpora los chayotes cocidos<br>
+
+                   Cocina unos minutos más para que absorban el sabor.<br><br>
+
+                   <b>6.</b> Sirve caliente<br>
+
+                   ¡Listo para acompañar o comer solo!<br>
+ 
+                </p>
+            </div>
+
+            <div class="recipe-card">
+                <div class="image-placeholder">
+                    <img src="ensalada chayote.jpeg" alt="crema de chayote">
+                </div>
+                <h2 class="recipe-title">Ensalada Fresca de Chayote</h2>
+                <div class="recipe-info">
+                    <div class="info-item">
+                        <div class="info-icon">⏱</div>
+                        <span>20 min</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">👥</div>
+                        <span>4 personas</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🔥</div>
+                        <span>Muy fácil</span>
+                    </div>
+                </div>
+                <p class="recipe-description">
+                    Una ensalada refrescante y nutritiva que aprovecha la textura crujiente del chayote crudo, combinada con ingredientes frescos y un aderezo ligero.
+                </p>
+                <div class="ingredients-list">
+                    <h3 class="ingredients-title">Ingredientes principales:</h3>
+                    <ul>
+                        <li>3 chayotes frescos</li>
+                        <li>2 tomates</li>
+                        <li>1 aguacate</li>
+                        <li>Cilantro fresco</li>
+                        <li>Limón y aceite de oliva</li>
+                    </ul>
+                </div>
+               <p class="recipe-description">
+                    <b>Preparación paso a paso:</b><br>
+                    <b>1.</b> Lava todos los ingredientes
+                    Asegúrate de que estén bien limpios: chayotes, tomates, aguacate y cilantro.<br><br>
+
+                    <b>2.</b> Pela y corta los chayotes<br>
+
+                    Pela los chayotes bajo el chorro de agua (pueden soltar una resina pegajosa).<br>
+                    Córtalos en tiras finas o cubos pequeños.<br><br>
+
+                    <b>3.</b> Corta los demás ingredientes<br>
+
+                    Tomates: en cubos medianos.<br>
+
+                    Aguacate: en cubos (agrégalo al final).<br>
+
+                    Cilantro: pícalo finamente.<br><br>
+
+                    <b>4.</b> Prepara el aderezo<br>
+                    En un tazón mezcla:<br>
+                    El jugo de los 2 limones<br>
+                    2–3 cucharadas de aceite de oliva<br>
+                    Sal y pimienta al gusto<br><br>
+
+                    <b>5.</b> Mezcla la ensalada<br>
+                    En un bol grande, junta el chayote, tomate y cilantro.<br>
+                    Agrega el aderezo y mezcla bien.<br>
+                    Por último, añade el aguacate con cuidado para que no se deshaga.<br><br>
+
+                    <b>6.</b> Sirve y disfruta<br>
+                    Puedes servirla inmediatamente o dejarla reposar unos minutos en el refrigerador para que esté más fresca.<br>
+
+
+
+                </p>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <script>
+        // Animación suave al hacer scroll
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.recipe-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Inicializar animaciones
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.recipe-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>
